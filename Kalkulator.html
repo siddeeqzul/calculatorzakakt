@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <title>CalculateNOW - Kira Zakat Anda</title>
+
+</head>
+<body>
+    <div class="container">
+        <div id="logo">
+            <img src="./Asset/images/logo.png" alt="ZakatNOW Logo">
+        </div>
+        <form id="zakatForm">
+            <div class="form-group">
+                <label for="negeri">Pilihan Negeri</label>
+                <select name="negeri" id="negeri" required>
+                    <option value="">Pilih Negeri</option>
+                    <option value="1">Johor</option>
+                    <option value="2">Kedah</option>
+                    <option value="3">Kelantan</option>
+                    <option value="4">Melaka</option>
+                    <option value="5">Negeri Sembilan</option>
+                    <option value="6">Pahang</option>
+                    <option value="7">Perak</option>
+                    <option value="8">Perlis</option>
+                    <option value="9">Pulau Pinang</option>
+                    <option value="10">Sabah</option>
+                    <option value="11">Sarawak</option>
+                    <option value="12">Selangor</option>
+                    <option value="13">Terengganu</option>
+                    <option value="14">WP Kuala Lumpur</option>
+                    <option value="15">WP Labuan</option>
+                    <option value="16">WP Putrajaya</option>
+                </select>
+            </div>
+            
+            <!-- Updated income section -->
+            <div class="form-group">
+                <label for="pendapatanBulanan">Jumlah Pendapatan Kasar Bulanan (RM)</label>
+                <input type="number" name="pendapatanBulanan" id="pendapatanBulanan" placeholder="Masukkan Jumlah Pendapatan Bulanan" required>
+            </div>
+            
+            <div class="income-item">
+                <span>Tambah Pendapatan Lain?</span>
+                <label class="deduction-switch">
+                    <input type="checkbox" id="showAdditionalIncome">
+                    <span class="deduction-slider"></span>
+                </label>
+            </div>
+            
+            <div id="additionalIncomeContainer" style="display: none;">
+                <div class="income-store">
+                    <button type="button" class="add-income-button" data-item="elaun">Elaun (Bulanan)</button>
+                    <button type="button" class="add-income-button" data-item="bonus">Bonus (Tahunan)</button>
+                    <button type="button" class="add-income-button" data-item="lainlain">Pendapatan Lain (Tahunan)</button>
+                </div>
+                <div class="selected-incomes"></div>
+                <div class="income-summary">
+                    <p>Jumlah Pendapatan Bulanan: <span id="totalMonthlyIncome">RM 0.00</span></p>
+                    <p>Jumlah Pendapatan Tahunan: <span id="totalAnnualIncome">RM 0.00</span></p>
+                </div>
+            </div>
+            
+            <div class="deduction-item toggle-container">
+                <span>Tambah Potongan?</span>
+                <label class="deduction-switch">
+                    <input type="checkbox" id="showDeductions">
+                    <span class="deduction-slider"></span>
+                </label>
+            </div>
+            <div id="deductionsContainer" style="display: none;">
+                <div class="deduction-store">
+                    <button type="button" class="add-button" data-item="diri" data-amount="9000">Diri (RM9,000)</button>
+                    <button type="button" class="add-button" data-item="isteri" data-amount="4000">Isteri (RM4,000)</button>
+                    <button type="button" class="add-button" data-item="anak">Anak</button>
+                    <button type="button" class="add-button" data-item="kwsp">KWSP (11% pendapatan tahunan)</button>
+                    <button type="button" class="add-button" data-item="sumbangan">Sumbangan Ibubapa</button>
+                    <button type="button" class="add-button" data-item="tabunghaji">Tabung Haji</button>
+                    <button type="button" class="add-button" data-item="takaful">Takaful</button>
+                </div>
+                <div class="selected-deductions"></div>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Kira Zakat</button>
+                <button type="reset" class="btn btn-reset">Ulang Semula</button>
+            </div>
+        </form>
+        <div class="result" id="result" style="display: none;">
+            <h2>Hasil Perhitungan Zakat</h2>
+            <p id="pendapatanResult"></p>
+            <p id="zakatResult" class="zakat-amount"></p>
+            <button type="button" id="payZakatButton" class="btn btn-primary btn-pay-zakat" style="display: none;">ZakatNOW</button>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span id="closePayment" class="close-modal">&times;</span>
+            <h3 class="modal-title">Bayar Zakat</h3>
+            
+            <!-- Payment Message Container -->
+            <div id="paymentMessage" class="payment-message"></div>
+            
+            <!-- Payment Form -->
+            <form id="paymentForm">
+                <div class="form-row">
+                    <label for="paymentAmount">Jumlah Bayaran (RM)</label>
+                    <input type="number" id="paymentAmount" class="payment-input" step="0.01" min="1" required>
+                </div>
+                
+                <div class="form-row">
+                    <label>Pilih Kaedah Pembayaran</label>
+                    <div class="payment-method">
+                        <div class="payment-option">
+                            <input type="radio" id="fpxPayment" name="paymentMethod" value="fpx">
+                            <label for="fpxPayment">
+                                <img src="./Asset/images/fpx-logo.png" alt="FPX">
+                                FPX
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="cardPayment" name="paymentMethod" value="card">
+                            <label for="cardPayment">
+                                <img src="./Asset/images/card-logo.png" alt="Card">
+                                Kad Kredit
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="walletPayment" name="paymentMethod" value="wallet">
+                            <label for="walletPayment">
+                                <img src="./Asset/images/ewallet-logo.png" alt="E-Wallet">
+                                E-Wallet
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="qrPayment" name="paymentMethod" value="qr">
+                            <label for="qrPayment">
+                                <img src="./Asset/images/qr-logo.png" alt="QR">
+                                QR Pay
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label for="payerName">Nama Pembayar</label>
+                    <input type="text" id="payerName" class="payment-input" required>
+                </div>
+                
+                <div class="form-row">
+                    <label for="payerEmail">E-mel</label>
+                    <input type="email" id="payerEmail" class="payment-input" required>
+                </div>
+                
+                <button type="submit" class="pay-button">Bayar Sekarang</button>
+            </form>
+            
+            <!-- Payment Processing Indicator -->
+            <div id="paymentProcessing" class="processing-payment">
+                <div class="spinner"></div>
+                <p>Memproses pembayaran anda...</p>
+            </div>
+            
+            <!-- Payment Success -->
+            <div id="paymentSuccess" class="payment-success">
+                <div class="success-icon">✓</div>
+                <h3>Pembayaran Berjaya!</h3>
+                <p>Terima kasih atas sumbangan zakat anda.</p>
+                <div id="paymentDetails" class="payment-details"></div>
+                <button type="button" class="btn btn-primary" onclick="window.print()">Cetak Resit</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        &copy 2025 ZakatNOW by UNITI Waqi
+    </footer>
+    
+    <script src="./scripts/tooltip.js"></script>
+    <script src="./scripts/payment.js"></script>
+    <script src="./scripts/app.js"></script>
+</body>
+</html>
