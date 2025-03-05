@@ -608,7 +608,7 @@ font-size: 0.8rem;
     }
 }
 
-/* Tooltip Styles */
+/* Tooltip Styles - Update to only apply to buttons, not added items */
 .tooltip {
     position: fixed;
     background-color: rgba(45, 45, 45, 0.9);
@@ -624,20 +624,49 @@ font-size: 0.8rem;
     word-wrap: break-word;
 }
 
+/* Update tooltip styling to only apply to buttons */
 .has-tooltip {
     cursor: help;
     position: relative;
 }
 
-/* Add a subtle dotted underline to elements with tooltips */
-.has-tooltip.deduction-label::after,
-.has-tooltip.income-label::after {
-    content: '';
+/* Only apply dotted underline to buttons with tooltips, not added items */
+.add-button.has-tooltip::after,
+.add-income-button.has-tooltip::after {
+    content: none; /* Remove the dotted underline completely */
+}
+
+/* Add a tooltip indicator icon to buttons with tooltips */
+.add-button.has-tooltip,
+.add-income-button.has-tooltip {
+    padding-right: 25px; /* Make space for the icon */
+    position: relative;
+}
+
+/* Add a subtle question mark icon to indicate tooltip availability */
+.add-button.has-tooltip::before,
+.add-income-button.has-tooltip::before {
+    content: "?";
     position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 100%;
-    border-bottom: 1px dotted #7631f5;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    background-color: rgba(118, 49, 245, 0.2);
+    color: #7631f5;
+    border-radius: 50%;
+    font-size: 11px;
+    line-height: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Remove tooltip indicator from labels */
+.deduction-label::after,
+.income-label::after {
+    content: none;
+    border-bottom: none;
 }
 
 /* Custom tooltip indicator for icons */
