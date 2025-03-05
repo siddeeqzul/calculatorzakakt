@@ -85,15 +85,9 @@ function renderIncomeItems() {
         const div = document.createElement('div');
         div.className = 'income-item';
 
-        // Create span with proper tooltip information
-        const tooltips = {
-            'elaun': 'Elaun bulanan akan ditambah ke jumlah pendapatan bulanan anda.',
-            'bonus': 'Bonus tahunan akan ditambah ke jumlah pendapatan tahunan anda.',
-            'lainlain': 'Pendapatan lain akan ditambah ke jumlah pendapatan tahunan anda.'
-        };
-
+        // Create span WITHOUT tooltip information - REMOVED tooltip
         div.innerHTML = `
-            <span class="income-label has-tooltip" data-tooltip="${tooltips[key]}">${formatIncomeLabel(key)}</span>
+            <span class="income-label">${formatIncomeLabel(key)}</span>
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div class="modern-quantity">
                     <input type="number" class="amount-input income-amount-input" value="${item.amount || 0}" 
@@ -468,23 +462,6 @@ function renderItems() {
             amountValue = `RM${monthlyAmount.toFixed(2)}/bulan`;
         }
         
-        // Prepare tooltips for different deduction types
-        const tooltips = {
-            'diri': 'Potongan asas untuk individu: RM9,000 setahun',
-            'isteri': `Potongan untuk isteri: RM4,000 × ${item.quantity} = RM${(item.quantity * 4000).toFixed(2)} setahun`,
-            'kwsp': 'KWSP: 11% daripada pendapatan tahunan',
-            'sumbangan': 'Potongan sumbangan kepada ibu bapa',
-            'tabunghaji': 'Potongan simpanan di Tabung Haji',
-            'takaful': 'Potongan premium takaful'
-        };
-        
-        // Special tooltip for different anak categories
-        const anakTooltips = {
-            'tidak-ipt': 'Potongan untuk anak tidak di IPT: RM2,000 setahun setiap anak',
-            'ipt': 'Potongan untuk anak di IPT: RM8,000 setahun setiap anak',
-            'oku': 'Potongan untuk anak OKU: RM6,000 setahun setiap anak'
-        };
-        
         // Special handling for anak items - completely different structure
         if (itemType === 'anak') {
             div.className = 'deduction-item anak-item';
@@ -500,7 +477,7 @@ function renderItems() {
                         data-item="${key}" min="1" max="99">
                     <button class="quantity-btn plus" data-item="${key}">+</button>
                 </div>
-                <div class="amount-display has-tooltip" data-tooltip="${anakTooltips[item.category] || 'Potongan untuk anak'}">${amountValue}</div>
+                <div class="amount-display">${amountValue}</div>
                 <button class="remove-btn" data-item="${key}">×</button>
             `;
         } else {
@@ -532,11 +509,11 @@ function renderItems() {
             }
             
             div.innerHTML = `
-                <span class="deduction-label has-tooltip" data-tooltip="${tooltips[itemType] || ''}">${formatLabel(itemType)}</span>
+                <span class="deduction-label">${formatLabel(itemType)}</span>
                 <div class="deduction-controls">
                     ${controlsHTML}
                 </div>
-                <div class="amount-display has-tooltip" data-tooltip="${tooltips[itemType] || ''}">${amountValue}</div>
+                <div class="amount-display">${amountValue}</div>
                 <button class="remove-btn" data-item="${key}">×</button>
             `;
         }
